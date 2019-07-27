@@ -12,7 +12,7 @@ app.get('/apps', (req, res) => {
     let results = apps;
 
     if (sort) {
-        if (!['rating', 'app'].includes(sort)) {
+        if (!['rating', 'app'].includes(sort.toLowerCase())) {
             return res.status(400).send('Please enter a sort value of either Rating or App')
         }
     }
@@ -24,12 +24,15 @@ app.get('/apps', (req, res) => {
         results = apps.filter(app => app.Genres.toLowerCase().includes(genres.toLowerCase()));
     }
 
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return s
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
 
     if (sort) {
-        results
-            .sort((a, b) => {
-                return a[sort] > b[sort] ? 1 : a[sort] < b[sort] ? -1 : 0;
-            });
+        results.sort((a, b) => {
+            return a[capitalize(sort)] > b[capitalize(sort)] ? 1 : a[capitalize(sort)] < b[capitalize(sort)] ? -1 : 0;
+        });
     }
 
     res.json(results);
