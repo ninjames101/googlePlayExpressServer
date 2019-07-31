@@ -2,9 +2,16 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const port = 8000;
+const fetch = require('node-fetch')
 app.use(morgan('common'));
 
-const apps = require('./playstore');
+const playstore = require('./playstore');
+
+app.get('/playstore', (req,res,next) => {
+    
+  res.status(200).json(playstore)
+    
+})
 
 app.get('/apps', (req, res) => {
     const { sort, genres } = req.query;
@@ -41,3 +48,5 @@ app.get('/apps', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is listening on Port ${port}`);
 })
+
+module.exports = app
